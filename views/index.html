@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link href="//assets.publishing.service.gov.uk/static/fonts-5ff8c53913434afd0072a480d7cfca67cace4c8d03f6ef96b78a4455728ce745.css" media="all" rel="stylesheet">
+    <script src="./canvas-text-wrapper.js"></script>
+    <style>
+      html {
+        box-sizing: border-box;
+        font-family: 'nta', sans-serif;
+      }
+      *, *:after, *:before {
+        box-sizing: inherit;
+      }
+      body {
+        padding: 1em;
+      }
+      h1 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 6vw;
+        line-height: 1;
+      }
+      input {
+        font-size: 16px;
+        padding: .5em;
+        border: 2px solid black;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Social Share Image</h1>
+    <input id="canvasInput" type="text" value="M M M M M M M M M M M M M M M M M M M M M"/>
+    <canvas id="canvasText" width="450" height="230"></canvas>
+    <script>
+      var CanvasTextWrapper = window.CanvasTextWrapper;
+    
+      var fontSize = 16;
+      var canvasPadding = 1.5625 * fontSize;
+      var logoHeight = 2 * fontSize;
+      var logoWidth = 2.5 * fontSize;
+      var logoFontSize = 1.5 * fontSize;
+      var canvasWidth = 28.125 * fontSize;
+      var canvasHeight = 14.375 * fontSize;
+      
+      var canvas = document.getElementById('canvasText');
+      canvas.style.fontSize = fontSize + "px";
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      var input = document.getElementById('canvasInput');
+  
+      var render = function () {
+        var string = input.value;
+
+        context = canvas.getContext('2d');
+        
+        // Draw background
+        context.fillStyle = "#055f9f";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "white";
+
+        // Draw logo  
+        var logo = new Image();
+        logo.src = '//assets.publishing.service.gov.uk/static/images/gov.uk_logotype_crown-ea874a79e09423d63420aff44f016fd0b92dc6dec0cc2668d63b150c8669875e.png';
+        var logoX = canvasPadding;
+        var logoY = (canvas.height - logoHeight) - canvasPadding;
+        logo.onload = function() {
+          logo.width = logoWidth;
+          logo.height = logoHeight;
+          context.drawImage(logo, logoX, logoY, logo.width, logo.height);
+          CanvasTextWrapper(canvas, 'GOV.UK', {
+            font: "bold " + logoFontSize + "px Arial, sans-serif",
+            textAlign: "left",
+            verticalAlign: "bottom",
+            paddingX: logoWidth + (2 * fontSize),
+            paddingY: canvasPadding
+          });
+        };
+
+        CanvasTextWrapper(canvas, string, {
+          font: "bold 5em Arial, sans-serif",
+          lineHeight: "10px",
+          textAlign: "left",
+          sizeToFill: true,
+          paddingX: canvasPadding,
+          paddingRight: 100,
+          paddingLeft: canvasPadding,
+          paddingTop: canvasPadding,
+          paddingBottom: logoHeight + (canvasPadding * 2.5)
+        });
+      };
+      render();
+      input.addEventListener('keyup', function () {
+        render();
+      });
+    </script>
+  </body>
+</html> 
